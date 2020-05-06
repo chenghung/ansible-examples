@@ -1,0 +1,35 @@
+---
+- hosts: wiki
+
+  become: yes
+
+  vars:
+    node_app_path: /home/ubuntu/nodejs-app
+
+  tasks:
+    - name: install node.js
+      apt:
+        name:
+          - nodejs 
+          - yarn
+        state: present
+    - name: ensure node.js app directory exists
+      file:
+        path: "{{ node_app_path }}"
+        state: directory
+    - name: copy node.js application
+      copy:
+        src: "{{ item.file }}"
+        dest: "{{ node_app_path }}"
+      with_items:
+        - { file: './nodejs/app.js' }
+        - { file: './nodejs/package.json' }
+        - { file: './nodejs/yarn.lock' }
+    - name: install node.js packages
+      command: "yarn install"
+      args:
+        chdir: "{{ node_app_path }}"
+    - name: launch node.js app
+      command: "yarn start"
+      args:
+        chdir: "{{ node_app_path }}"

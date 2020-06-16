@@ -1,15 +1,16 @@
 ---
 - hosts: wiki
-  become: yes
   vars_files:
     - "./vars/app.yml"
 
   pre_tasks:
     - name: update apt repository
+      become: yes
       apt: update_cache=yes cache_valid_time=3600
 
   tasks:
     - name: install node.js
+      become: yes
       apt:
         name:
           - nodejs 
@@ -19,10 +20,14 @@
       file:
         path: "{{ node_app_path }}"
         state: directory
+        owner: ubuntu
+        group: ubuntu
     - name: copy node.js application
       copy:
         src: "{{ item.file }}"
         dest: "{{ node_app_path }}"
+        owner: ubuntu
+        group: ubuntu
       with_items:
         - { file: './nodejs/app.js' }
         - { file: './nodejs/package.json' }

@@ -48,7 +48,9 @@
         chdir: "{{ node_app_path }}"
       notify:
         - call in every action2
+        - restart nginx
         - call in every action
 
   handlers:
     - include: "./handlers/msg.yml"
+    - include: "./handlers/nginx.yml"

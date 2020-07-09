@@ -1,0 +1,5 @@
+- name: call in every action
+  debug: msg="done!!!"
+
+- name: call in every action2
+  debug: msg="done2!!!"

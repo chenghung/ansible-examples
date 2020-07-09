@@ -22,6 +22,8 @@
         state: directory
         owner: ubuntu
         group: ubuntu
+      notify:
+        - call in every action
     - name: copy node.js application
       copy:
         src: "{{ item.file }}"
@@ -32,11 +34,21 @@
         - { file: './nodejs/app.js' }
         - { file: './nodejs/package.json' }
         - { file: './nodejs/yarn.lock' }
+      notify:
+        - call in every action
     - name: install node.js packages
       command: "yarn install"
       args:
         chdir: "{{ node_app_path }}"
+      notify:
+        - call in every action
     - name: launch node.js app
       command: "yarn start"
       args:
         chdir: "{{ node_app_path }}"
+      notify:
+        - call in every action2
+        - call in every action
+
+  handlers:
+    - include: "./handlers/msg.yml"
